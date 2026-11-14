@@ -421,3 +421,32 @@ Projeto desenvolvido para a disciplina de Service-Oriented Architecture (SOA), c
 O AgroFácil demonstra a implementação de uma API REST para gestão agrícola, integrando Java, Spring Boot e PostgreSQL.
 
 A solução permite gerenciar agricultores, plantações e colheitas, mantendo relacionamentos entre os dados e aplicando validações para preservar a consistência das informações.
+
+## Evolução do banco de dados — Flyway V3
+
+O projeto utiliza Flyway para controlar as alterações do banco PostgreSQL.
+
+As migrações implementadas são:
+
+- V1 — Criação das tabelas agricultores, plantacoes e colheitas.
+- V2 — Inserção de dados de exemplo.
+- V3 — Adição da coluna email à tabela agricultores.
+
+A migração V3 demonstra a evolução da estrutura do banco sem
+excluir os registros existentes.
+
+### Cadastro de agricultores com e-mail
+
+O cadastro de agricultores permite informar um e-mail opcional.
+
+Exemplo de requisição POST /agricultores:
+
+{
+"nome": "Joao Oliveira",
+"telefone": "11977776666",
+"cidade": "Sorocaba",
+"email": "joao@exemplo.com"
+}
+
+O campo email também está disponível nas consultas e atualizações
+dos agricultores.

@@ -1,0 +1,3 @@
+
+ALTER TABLE agricultores
+ADD COLUMN email VARCHAR(150);

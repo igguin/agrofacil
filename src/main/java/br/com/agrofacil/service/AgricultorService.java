@@ -41,7 +41,8 @@ public class AgricultorService {
                 agricultor.getId(),
                 agricultor.getNome(),
                 agricultor.getTelefone(),
-                agricultor.getCidade());
+                agricultor.getCidade(),
+                agricultor.getEmail());
     }
 
     public AgricultorResponseDTO cadastrar(AgricultorRequestDTO dados) {
@@ -50,6 +51,7 @@ public class AgricultorService {
         agricultor.setNome(dados.nome());
         agricultor.setTelefone(dados.telefone());
         agricultor.setCidade(dados.cidade());
+        agricultor.setEmail(dados.email());
 
         validar(agricultor);
 
@@ -80,6 +82,7 @@ public class AgricultorService {
         agricultor.setNome(dados.nome());
         agricultor.setTelefone(dados.telefone());
         agricultor.setCidade(dados.cidade());
+        agricultor.setEmail(dados.email());
 
         validar(agricultor);
 

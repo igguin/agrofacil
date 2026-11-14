@@ -20,6 +20,9 @@ public class Agricultor {
     @Column(nullable = false, length = 100)
     private String cidade;
 
+    @Column(length = 150)
+    private String email;
+
     public Agricultor() {
     }
 
@@ -54,4 +57,13 @@ public class Agricultor {
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }
