@@ -1,5 +1,17 @@
 # 🌱 AgroFácil — API de Gestão Agrícola
 
+## Integrantes da equipe
+
+- Igor Brunelli Ralo - rm 555035
+- Jose Antonio Kretzer Rodriguez - rm 555523
+- victor mattenhauer lopes capp - rm 555753
+
+## Global Solution 2026.2
+
+Disciplina: Arquitetura Orientada a Serviços e Web Services
+
+Projeto: AgroFácil — API de Gestão Agrícola
+
 ## 📌 Sobre o projeto
 
 O AgroFácil é uma API REST desenvolvida como projeto acadêmico da disciplina de Service-Oriented Architecture (SOA).
@@ -282,7 +294,7 @@ O projeto inclui o Maven Wrapper, portanto não é necessário instalar o Maven 
 ### 1. Clonar o repositório
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/igguin/agrofacil.git
 ```
 
 Depois, acessar a pasta do projeto que contém o arquivo `pom.xml`.

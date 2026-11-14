@@ -10,6 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import br.com.agrofacil.dto.ErroResponseDTO;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @RestController
 @RequestMapping("/plantacoes")
 public class PlantacaoController {
@@ -19,6 +27,14 @@ public class PlantacaoController {
     public PlantacaoController(PlantacaoService service) {
         this.service = service;
     }
+
+    @Operation(summary = "Cadastrar uma plantação", description = "Cadastra uma plantação vinculada a um agricultor existente.")
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Plantação cadastrada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos, como área menor ou igual a zero", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErroResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Agricultor não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErroResponseDTO.class)))
+    })
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

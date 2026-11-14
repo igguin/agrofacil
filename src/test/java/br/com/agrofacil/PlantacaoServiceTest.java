@@ -19,163 +19,131 @@ import static org.mockito.Mockito.*;
 
 class PlantacaoServiceTest {
 
-    @Test
-    void naoDeveCadastrarPlantacaoComAreaZero() {
+        @Test
+        void naoDeveCadastrarPlantacaoComAreaZero() {
 
-        PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
 
-        AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
+                PlantacaoService service = new PlantacaoService(
+                                plantacaoRepository, agricultorRepository);
 
-        PlantacaoService service = new PlantacaoService(
-                plantacaoRepository,
-                agricultorRepository);
+                PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
+                                1L, "Milho", BigDecimal.ZERO,
+                                LocalDate.of(2026, 11, 14));
 
-        PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
-                1L,
-                "Milho",
-                BigDecimal.ZERO,
-                LocalDate.of(2026, 11, 14));
+                IllegalArgumentException erro = assertThrows(
+                                IllegalArgumentException.class,
+                                () -> service.cadastrar(dados));
 
-        ResponseStatusException erro = assertThrows(
-                ResponseStatusException.class,
-                () -> service.cadastrar(dados));
+                assertEquals("A área deve ser maior que zero.", erro.getMessage());
+                verify(plantacaoRepository, never()).save(any());
+        }
 
-        assertEquals(HttpStatus.BAD_REQUEST, erro.getStatusCode());
+        @Test
+        void naoDeveCadastrarPlantacaoComAreaNegativa() {
 
-        verify(plantacaoRepository, never()).save(any());
-    }
+                PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
 
-    @Test
-    void naoDeveCadastrarPlantacaoComAreaNegativa() {
+                PlantacaoService service = new PlantacaoService(
+                                plantacaoRepository, agricultorRepository);
 
-        PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
+                                1L, "Soja", new BigDecimal("-5.00"),
+                                LocalDate.of(2026, 11, 14));
 
-        AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
+                IllegalArgumentException erro = assertThrows(
+                                IllegalArgumentException.class,
+                                () -> service.cadastrar(dados));
 
-        PlantacaoService service = new PlantacaoService(
-                plantacaoRepository,
-                agricultorRepository);
+                assertEquals("A área deve ser maior que zero.", erro.getMessage());
+                verify(plantacaoRepository, never()).save(any());
+        }
 
-        PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
-                1L,
-                "Soja",
-                new BigDecimal("-5.00"),
-                LocalDate.of(2026, 11, 14));
+        @Test
+        void naoDeveCadastrarPlantacaoSemCultura() {
 
-        ResponseStatusException erro = assertThrows(
-                ResponseStatusException.class,
-                () -> service.cadastrar(dados));
+                PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
 
-        assertEquals(HttpStatus.BAD_REQUEST, erro.getStatusCode());
+                PlantacaoService service = new PlantacaoService(
+                                plantacaoRepository, agricultorRepository);
 
-        verify(plantacaoRepository, never()).save(any());
-    }
+                PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
+                                1L, "", new BigDecimal("10.00"),
+                                LocalDate.of(2026, 11, 14));
 
-    @Test
-    void naoDeveCadastrarPlantacaoSemCultura() {
+                IllegalArgumentException erro = assertThrows(
+                                IllegalArgumentException.class,
+                                () -> service.cadastrar(dados));
 
-        PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                assertEquals("A cultura é obrigatória.", erro.getMessage());
+                verify(plantacaoRepository, never()).save(any());
+        }
 
-        AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
+        @Test
+        void naoDeveCadastrarPlantacaoSemData() {
 
-        PlantacaoService service = new PlantacaoService(
-                plantacaoRepository,
-                agricultorRepository);
+                PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
 
-        PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
-                1L,
-                "",
-                new BigDecimal("10.00"),
-                LocalDate.of(2026, 11, 14));
+                PlantacaoService service = new PlantacaoService(
+                                plantacaoRepository, agricultorRepository);
 
-        ResponseStatusException erro = assertThrows(
-                ResponseStatusException.class,
-                () -> service.cadastrar(dados));
+                PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
+                                1L, "Milho", new BigDecimal("10.00"), null);
 
-        assertEquals(HttpStatus.BAD_REQUEST, erro.getStatusCode());
+                IllegalArgumentException erro = assertThrows(
+                                IllegalArgumentException.class,
+                                () -> service.cadastrar(dados));
 
-        verify(plantacaoRepository, never()).save(any());
-    }
+                assertEquals("A data do plantio é obrigatória.", erro.getMessage());
+                verify(plantacaoRepository, never()).save(any());
+        }
 
-    @Test
-    void naoDeveCadastrarPlantacaoSemData() {
+        @Test
+        void naoDeveCadastrarPlantacaoSemAgricultor() {
 
-        PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
 
-        AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
+                PlantacaoService service = new PlantacaoService(
+                                plantacaoRepository, agricultorRepository);
 
-        PlantacaoService service = new PlantacaoService(
-                plantacaoRepository,
-                agricultorRepository);
+                PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
+                                null, "Milho", new BigDecimal("10.00"),
+                                LocalDate.of(2026, 11, 14));
 
-        PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
-                1L,
-                "Milho",
-                new BigDecimal("10.00"),
-                null);
+                IllegalArgumentException erro = assertThrows(
+                                IllegalArgumentException.class,
+                                () -> service.cadastrar(dados));
 
-        ResponseStatusException erro = assertThrows(
-                ResponseStatusException.class,
-                () -> service.cadastrar(dados));
+                assertEquals("O agricultor é obrigatório.", erro.getMessage());
+                verify(plantacaoRepository, never()).save(any());
+        }
 
-        assertEquals(HttpStatus.BAD_REQUEST, erro.getStatusCode());
+        @Test
+        void naoDeveCadastrarPlantacaoComAgricultorInexistente() {
 
-        verify(plantacaoRepository, never()).save(any());
-    }
+                PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
 
-    @Test
-    void naoDeveCadastrarPlantacaoSemAgricultor() {
+                PlantacaoService service = new PlantacaoService(
+                                plantacaoRepository, agricultorRepository);
 
-        PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
+                PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
+                                99999L, "Soja", new BigDecimal("10.00"),
+                                LocalDate.of(2026, 11, 14));
 
-        AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
+                when(agricultorRepository.findById(99999L))
+                                .thenReturn(java.util.Optional.empty());
 
-        PlantacaoService service = new PlantacaoService(
-                plantacaoRepository,
-                agricultorRepository);
+                ResponseStatusException erro = assertThrows(
+                                ResponseStatusException.class,
+                                () -> service.cadastrar(dados));
 
-        PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
-                null,
-                "Milho",
-                new BigDecimal("10.00"),
-                LocalDate.of(2026, 11, 14));
-
-        ResponseStatusException erro = assertThrows(
-                ResponseStatusException.class,
-                () -> service.cadastrar(dados));
-
-        assertEquals(HttpStatus.BAD_REQUEST, erro.getStatusCode());
-
-        verify(plantacaoRepository, never()).save(any());
-    }
-
-    @Test
-    void naoDeveCadastrarPlantacaoComAgricultorInexistente() {
-
-        PlantacaoRepository plantacaoRepository = mock(PlantacaoRepository.class);
-
-        AgricultorRepository agricultorRepository = mock(AgricultorRepository.class);
-
-        PlantacaoService service = new PlantacaoService(
-                plantacaoRepository,
-                agricultorRepository);
-
-        PlantacaoRequestDTO dados = new PlantacaoRequestDTO(
-                99999L,
-                "Soja",
-                new BigDecimal("10.00"),
-                LocalDate.of(2026, 11, 14));
-
-        when(agricultorRepository.findById(99999L))
-                .thenReturn(java.util.Optional.empty());
-
-        ResponseStatusException erro = assertThrows(
-                ResponseStatusException.class,
-                () -> service.cadastrar(dados));
-
-        assertEquals(HttpStatus.NOT_FOUND, erro.getStatusCode());
-
-        verify(plantacaoRepository, never()).save(any());
-    }
-
+                assertEquals(HttpStatus.NOT_FOUND, erro.getStatusCode());
+                verify(plantacaoRepository, never()).save(any());
+        }
 }

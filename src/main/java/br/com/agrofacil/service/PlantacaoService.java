@@ -7,7 +7,7 @@ import br.com.agrofacil.model.Agricultor;
 import br.com.agrofacil.model.Plantacao;
 import br.com.agrofacil.repository.AgricultorRepository;
 import br.com.agrofacil.repository.PlantacaoRepository;
-
+import br.com.agrofacil.validation.PlantacaoValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,34 +29,6 @@ public class PlantacaoService {
         this.agricultorRepository = agricultorRepository;
     }
 
-    private void validar(PlantacaoRequestDTO dados) {
-
-        if (dados.cultura() == null || dados.cultura().isBlank()) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "A cultura é obrigatória.");
-        }
-
-        if (dados.areaHectares() == null ||
-                dados.areaHectares().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "A área deve ser maior que zero.");
-        }
-
-        if (dados.dataPlantio() == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "A data do plantio é obrigatória.");
-        }
-
-        if (dados.agricultorId() == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "O agricultor é obrigatório.");
-        }
-    }
-
     private PlantacaoResponseDTO converterParaDTO(Plantacao plantacao) {
         return new PlantacaoResponseDTO(
                 plantacao.getId(),
@@ -68,7 +40,7 @@ public class PlantacaoService {
 
     public PlantacaoResponseDTO cadastrar(PlantacaoRequestDTO dados) {
 
-        validar(dados);
+        PlantacaoValidator.validar(dados);
 
         Agricultor agricultor = agricultorRepository
                 .findById(dados.agricultorId())
@@ -118,7 +90,7 @@ public class PlantacaoService {
 
     public PlantacaoResponseDTO atualizar(Long id, PlantacaoRequestDTO dados) {
 
-        validar(dados);
+        PlantacaoValidator.validar(dados);
 
         Plantacao plantacao = plantacaoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
