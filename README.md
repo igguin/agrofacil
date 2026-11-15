@@ -63,6 +63,7 @@ Atributos:
 - nome
 - telefone
 - cidade
+- email (opcional)
 
 ### Plantação
 
@@ -280,6 +281,17 @@ Responsável pela inserção de dados fictícios para demonstração da aplicaç
 
 As migrações são executadas automaticamente na inicialização da aplicação.
 
+### V3 — Adição do e-mail aos agricultores
+
+Arquivo:
+
+`V3__adicionar_email_agricultores.sql`
+
+Essa migração adiciona a coluna `email` à tabela `agricultores`.
+
+O campo é opcional e permite cadastrar um endereço de e-mail
+sem prejudicar os agricultores registrados anteriormente.
+
 ## 🚀 Como executar o projeto
 
 ### Pré-requisitos
@@ -353,6 +365,15 @@ http://localhost:8080/v3/api-docs
 
 Os testes foram desenvolvidos com JUnit e Mockito.
 
+O projeto possui **17 testes automatizados**, distribuídos entre testes unitários dos serviços, um teste de inicialização do Spring Boot e um teste de endpoint HTTP.
+
+### Teste de endpoint HTTP
+
+O arquivo `PlantacaoControllerTest.java` utiliza MockMvc para verificar se a API retorna:
+
+- HTTP 400 quando uma plantação possui área igual a zero.
+- Uma resposta JSON com a mensagem de erro correspondente.
+
 O Mockito permite simular os repositórios sem modificar os dados reais do PostgreSQL durante os testes unitários.
 
 ### Testes de agricultores
@@ -422,31 +443,19 @@ O AgroFácil demonstra a implementação de uma API REST para gestão agrícola,
 
 A solução permite gerenciar agricultores, plantações e colheitas, mantendo relacionamentos entre os dados e aplicando validações para preservar a consistência das informações.
 
-## Evolução do banco de dados — Flyway V3
-
-O projeto utiliza Flyway para controlar as alterações do banco PostgreSQL.
-
-As migrações implementadas são:
-
-- V1 — Criação das tabelas agricultores, plantacoes e colheitas.
-- V2 — Inserção de dados de exemplo.
-- V3 — Adição da coluna email à tabela agricultores.
-
-A migração V3 demonstra a evolução da estrutura do banco sem
-excluir os registros existentes.
-
 ### Cadastro de agricultores com e-mail
 
-O cadastro de agricultores permite informar um e-mail opcional.
+O campo e-mail é opcional.
 
-Exemplo de requisição POST /agricultores:
+Exemplo de requisição `POST /agricultores`:
 
+```json
 {
-"nome": "Joao Oliveira",
-"telefone": "11977776666",
-"cidade": "Sorocaba",
-"email": "joao@exemplo.com"
+  "nome": "Joao Oliveira",
+  "telefone": "11977776666",
+  "cidade": "Sorocaba",
+  "email": "joao@exemplo.com"
 }
+```
 
-O campo email também está disponível nas consultas e atualizações
-dos agricultores.
+O campo `email` também está disponível nas consultas e atualizações dos agricultores.
